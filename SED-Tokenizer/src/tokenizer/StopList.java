@@ -7,6 +7,16 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class StopList {
+	
+	/*
+	 * StopList loads a text file with stop words.
+	 * The first line has to be the number of lines in a file.
+	 * Via function find one can check whether a word appears
+	 * in the stop word list. find(..) uses binary search.
+	 * 
+	 * B trees would be better but hard to implement...
+	 * 
+	 */
 
 	String[] list;
 
@@ -44,7 +54,6 @@ public class StopList {
 
 		int a = 0, b = list.length - 1;
 		while (a <= b) {
-			//System.out.println("a: "+a+", b:"+b);
 			int elem = (b + a) / 2;
 			if (word.compareTo(list[elem]) < 0) {
 				b = elem - 1;
