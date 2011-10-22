@@ -10,7 +10,7 @@ public class Main {
 	 * generally lack a graphical user interface. 
 	 */
 	public static void main(String[] args) {
-		new Controller(3,1).start();
+		new Controller(5,1).start();
 
 	}
 

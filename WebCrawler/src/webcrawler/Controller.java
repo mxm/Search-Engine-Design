@@ -1,20 +1,18 @@
 package webcrawler;
 
-import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 
 public class Controller extends Thread {
 
 	int numThreads;
 	int depth = 0, maxDepth;
-	int counter = 0;
 	volatile boolean stop;
 	Queue q;
 
 	Worker[] workers;
 	CyclicBarrier barrier;
 
-	public Controller(int numThreads, final int maxDepth) {
+	public Controller(int numThreads,final int maxDepth) {
 		this.numThreads = numThreads;
 		this.maxDepth = maxDepth;
 		workers = new Worker[numThreads];
