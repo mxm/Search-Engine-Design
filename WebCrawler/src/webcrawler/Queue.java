@@ -1,6 +1,7 @@
 package webcrawler;
 
 import java.net.URL;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Set;
 
@@ -13,28 +14,41 @@ import java.util.Set;
 public class Queue {
 
 	int depth = 0;
-	LinkedList<URL> list1;
-	LinkedList<URL> list2;
-	// current list to work with;
-	LinkedList<URL> list;
-	Set visitedURLs;
+	// Two lists per depth: one for current URLs, one for new ones
+	LinkedList<URL> curURLs;
+	LinkedList<URL> newURLs;
+	Set<URL> visitedURLs;
 
 	public Queue() {
-		list1 = new LinkedList<URL>();
-		list2 = new LinkedList<URL>();
+		curURLs = new LinkedList<URL>();
+		newURLs = new LinkedList<URL>();
+		visitedURLs = new HashSet<URL>();
+	}
+
+	public void setDepth(int depth) {
+		this.depth = depth;
+		/*
+		 * switch the lists. The new URL list will become the current list
+		 * because we advanced to the next depth
+		 */
+		LinkedList<URL> temp = curURLs;
+		curURLs = newURLs;
+		newURLs = temp;
 
 	}
 
 	public synchronized URL getURL() {
-		if (list.isEmpty()) {
+		if (curURLs.isEmpty()) {
 			return null;
 		} else {
-			return list.pop();
+			URL newURL = curURLs.pop();
+			visitedURLs.add(newURL);
+			return newURL;
 		}
 	}
 
 	public synchronized void insertURL(URL url) {
-		list.add(url);
+		newURLs.add(url);
 	}
 
 }
