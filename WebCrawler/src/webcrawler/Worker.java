@@ -11,6 +11,10 @@ public class Worker extends Thread {
 	/*
 	 * Worker.java 
 	 * The workers crawl websites, tokenize them and generate Ngrams
+	 * 
+	 * 2011 - Maximilian Michels
+	 * max.michels@fu-berlin.de
+	 * 
 	 */
 
 	Queue queue;

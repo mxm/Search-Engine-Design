@@ -16,6 +16,7 @@ public class Main {
 	 * 
 	 * 
 	 * 2011 - Maximilian Michels
+	 * max.michels@fu-berlin.de
 	 * 
 	 */
 

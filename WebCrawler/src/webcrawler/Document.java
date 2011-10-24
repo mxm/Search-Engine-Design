@@ -11,6 +11,9 @@ import postprocessing.Tokenizer;
 /*
  * This class provides methods for getting the content
  * of a url or tokenizing a document
+ * 
+ * 2011 - Maximilian Michels
+ * max.michels@fu-berlin.de
  */
 
 public class Document implements Serializable {

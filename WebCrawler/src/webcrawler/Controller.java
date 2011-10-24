@@ -10,6 +10,9 @@ public class Controller extends Thread {
 	 * queue. When the Workers finish they will wait for the Controller to
 	 * increase the depth of the crawling process and provide a new queue, that
 	 * is switching the lists in the Queue object.
+	 * 
+	 * 2011 - Maximilian Michels
+	 * max.michels@fu-berlin.de
 	 */
 
 	int numThreads;
