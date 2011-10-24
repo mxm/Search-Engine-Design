@@ -6,15 +6,19 @@ import java.nio.CharBuffer;
 import java.util.*;
 import java.util.regex.*;
 
+import postprocessing.NGram;
+import postprocessing.Tokenizer;
+
 /*
  * This class provides methods for getting the content
  * of a url or tokenizing a document
  */
 
-public class Document {
+public class Document implements Serializable {
+
+	private static final long serialVersionUID = -3092849712355372568L;
 
 	URL url;
-
 	String host;
 	int len;
 	String type;
@@ -27,6 +31,8 @@ public class Document {
 			.compile(
 					"<a\\s*href=['\"]([\\w\\/.:\\-\\d]+)[#]?[\\w\\/.:\\-\\d]*['\"]\\s*>",
 					Pattern.CASE_INSENSITIVE);
+
+	NGram ngram;
 
 	public Document(URL url) {
 		this.url = url;
@@ -108,10 +114,34 @@ public class Document {
 		return itemsForQueue;
 	}
 
-	
-	
-	public static String[] tokenize(String str) {
-		return null;
+	public void tokenize() {
+		content = Tokenizer.tokenize(content);
+	}
+
+	public void generateNGram(int n) {
+		ngram = new NGram(n, content);
+	}
+
+	public boolean save() {
+		FileOutputStream fout = null;
+		ObjectOutputStream objout = null;
+
+		try {
+			fout = new FileOutputStream(url.toString());
+			objout = new ObjectOutputStream(fout);
+			objout.writeObject(this);
+			return true;
+
+		} catch (FileNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			return false;
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			return false;
+		}
+
 	}
 
 }
