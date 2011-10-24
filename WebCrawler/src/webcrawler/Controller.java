@@ -15,7 +15,7 @@ public class Controller extends Thread {
 	int numThreads;
 	int depth = 0;
 	int maxDepth;
-	boolean stop;
+	volatile boolean stop;
 	Queue queue;
 
 	Worker[] workers;
@@ -52,17 +52,42 @@ public class Controller extends Thread {
 	}
 
 	public void run() {
+		
 		for (Worker worker : workers) {
 			worker.start();
 		}
-		try {
-			Thread.sleep(10000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+
+	}
+	
+	public void stopCrawling(){
+		stop = true;
+		for(Worker worker : workers){
+			try {
+				worker.join();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		System.out.println("Crawler stopped!");
+	}
+	
+	public Document[] getDocuments(){
+		int numDocuments = 0;
+		for(Worker worker : workers){
+			numDocuments += worker.docs.size();		
 		}
 		
-		System.out.println(queue.extractedURLs);
-
+		int k = 0;
+		Document[] docs = new Document[numDocuments];
+		for(Worker worker : workers){
+			for(int i=0;i<worker.docs.size();k++,i++){
+				docs[k] = worker.docs.get(i);
+			}
+		}
+		
+		return docs;
+		
+		
 	}
 }

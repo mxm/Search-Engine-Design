@@ -1,6 +1,5 @@
 package webcrawler;
 
-import java.io.*;
 import java.net.*;
 import java.util.Collection;
 import java.util.Vector;
@@ -36,6 +35,10 @@ public class Worker extends Thread {
 			URL url;
 			
 			while ((url = queue.getURL()) != null) {
+				
+				if (con.stop)
+					break;
+				
 				Document doc = new Document(url);
 				//continue if download fails
 				if(!doc.download()){
@@ -48,7 +51,7 @@ public class Worker extends Thread {
 				doc.tokenize();
 				doc.generateNGram(3);
 				
-				//we will store them in memory first...
+				//we will store them in memory for now...
 				//doc.save();
 				docs.add(doc);
 			}

@@ -1,60 +1,64 @@
 package webcrawler;
 
+import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Set;
 
-import javax.swing.*;
+import postprocessing.NFragment;
+import postprocessing.NGram;
 
 public class Main {
 
 	/**
 	 * Main class of the WebCrawler
 	 * 
-	 * This WebCrawler uses a command-line interface making it very easy to
-	 * deploy remotely on linux servers that generally lack a graphical user
-	 * interface.
+	 * This Web Crawler has no GUI yet, but will soon have one... So for now we
+	 * have to use the main method to test it
+	 * 
+	 * 
+	 * 2011 - Maximilian Michels
+	 * 
 	 */
-	Controller con;
 
-	public Main(Controller con) {
+	public static void main(String[] args) throws InterruptedException,
+			MalformedURLException {
 
-		this.con = con;
-		JFrame frame = new JFrame("WebCrawler and simple Search Engine");
-		frame.setSize(640, 480);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-		JPanel panel = new JPanel();
-		frame.add(panel);
-
-	
-
-		try {
-			Thread.sleep(30000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-				
-		Set<URL> q = con.queue.extractedURLs;
-		String[] listbla = new String[q.size()];
-		int i=0;
-		for(URL url : q){
-			System.out.println(url);
-		}
-
-		JList list = new JList(listbla);
-
-		panel.add(list);
-		frame.repaint();
-		
-		frame.setVisible(true);
-		
-	}
-
-	public static void main(String[] args) {
+		// Start the web crawler's with 5 threads and a depth of 3
 		Controller con = new Controller(5, 3);
+
+		// Start at some websites
+		con.queue.curURLs.add(new URL("http://en.wikipedia.org"));
+		con.queue.curURLs.add(new URL("http://ce.istanbul.edu.tr"));
+		// start the crawling
 		con.start();
-		//new Main(con);
+
+		// wait 10 seconds for the crawler to get some pages
+		Thread.sleep(10000);
+		// stop the crawler
+		con.stopCrawling();
+
+		// get the documents
+		Document[] docs = con.getDocuments();
+
+		// pick a search string
+		String searchString = "wikimedia best wiki technology";
+		// Generate ngram of the search string
+		NGram ngramSearchString = new NGram(3, searchString);
+		// Pick most common fragment of ngram
+		NFragment fragment = ngramSearchString.getMostImportantFragment();
+
+		// Search through document ngrams and find the given fragment
+		System.out.println("------Results-------");
+		System.out.println("most common ngram fragment: " + fragment);
+		for (Document doc : docs) {
+			NFragment foundFrag;
+			if ((foundFrag = doc.ngram.find(fragment)) != null) {
+				System.out.println("////////");
+				System.out.println("We found ngram in " + doc.url);
+				System.out.println("Content (only 500 chars): " + doc.content.substring(0, 500));
+				System.out.println("NGrams (only most popular): " + doc.ngram.toString().substring(0, 500));
+			}
+		}
+		System.out.println("------End-----------");
 
 	}
 

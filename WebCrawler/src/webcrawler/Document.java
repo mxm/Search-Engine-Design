@@ -2,7 +2,6 @@ package webcrawler;
 
 import java.io.*;
 import java.net.*;
-import java.nio.CharBuffer;
 import java.util.*;
 import java.util.regex.*;
 
@@ -115,7 +114,7 @@ public class Document implements Serializable {
 	}
 
 	public void tokenize() {
-		content = Tokenizer.tokenize(content);
+		content = Tokenizer.tokenize(content.toLowerCase());
 	}
 
 	public void generateNGram(int n) {
@@ -133,11 +132,9 @@ public class Document implements Serializable {
 			return true;
 
 		} catch (FileNotFoundException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 			return false;
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 			return false;
 		}

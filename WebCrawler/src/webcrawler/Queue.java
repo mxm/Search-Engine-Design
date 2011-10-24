@@ -1,6 +1,5 @@
 package webcrawler;
 
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collection;
 import java.util.HashSet;
@@ -29,12 +28,6 @@ public class Queue {
 		visitedURLs = new HashSet<URL>();
 		extractedURLs = new HashSet<URL>();
 		
-		try {
-			curURLs.add(new URL("http://wikipedia.de"));
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 
 	public void setDepth(int depth) {
