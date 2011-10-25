@@ -1,6 +1,5 @@
 package webcrawler;
 
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collection;
 import java.util.HashSet;
@@ -12,6 +11,9 @@ import java.util.Set;
  * The Queue Class is used to store URLs
  * It uses two LinkedLists. One list is used to store URLs to be crawled
  * for the current depth, the other one to store the next depth level.
+ * 
+ * 2011 - Maximilian Michels
+ * max.michels@fu-berlin.de
  */
 
 public class Queue {
@@ -29,12 +31,6 @@ public class Queue {
 		visitedURLs = new HashSet<URL>();
 		extractedURLs = new HashSet<URL>();
 		
-		try {
-			curURLs.add(new URL("http://wikipedia.de"));
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 
 	public void setDepth(int depth) {
