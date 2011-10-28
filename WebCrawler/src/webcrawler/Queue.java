@@ -30,15 +30,14 @@ public class Queue {
 		newURLs = new LinkedList<URL>();
 		visitedURLs = new HashSet<URL>();
 		extractedURLs = new HashSet<URL>();
-		
+
 	}
 
 	public void setDepth(int depth) {
 		this.depth = depth;
 		/*
-		 * switch the lists. this can only be done when all
-		 * threads are waiting through the controller
-		 * The new URL list will become the current list
+		 * switch the lists. this can only be done when all threads are waiting
+		 * through the controller The new URL list will become the current list
 		 * because we advanced to the next depth
 		 */
 		LinkedList<URL> temp = curURLs;
@@ -58,15 +57,15 @@ public class Queue {
 	}
 
 	public synchronized void insertURL(URL url) {
-		newURLs.add(url);
-		extractedURLs.add(url);
+		if (!extractedURLs.add(url)) {
+			newURLs.add(url);
+		}
+
 	}
-	
-	public synchronized void insertURLCollection(Collection<URL> col){
-		for(URL url : col){
-			if(!extractedURLs.contains(url)){
-				insertURL(url);				
-			}
+
+	public synchronized void insertURLCollection(Collection<URL> col) {
+		for (URL url : col) {
+			insertURL(url);
 		}
 	}
 
