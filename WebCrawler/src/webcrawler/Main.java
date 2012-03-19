@@ -31,7 +31,11 @@ public class Main {
 		con.queue.curURLs.add(new URL("http://ce.istanbul.edu.tr"));
 		// start the crawling
 		con.start();
-
+		/*
+		// wait 10 seconds for the crawler to get some pages
+		Thread.sleep(10000);
+		// stop the crawler
+		con.stopCrawling();
 		// wait 10 seconds for the crawler to get some pages
 		Thread.sleep(10000);
 		// stop the crawler
@@ -60,7 +64,7 @@ public class Main {
 			}
 		}
 		System.out.println("------End-----------");
-
+*/
 	}
 
 }

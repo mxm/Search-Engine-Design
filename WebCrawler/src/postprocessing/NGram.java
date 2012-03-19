@@ -1,10 +1,11 @@
 package postprocessing;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Vector;
 
-public class NGram {
+public class NGram implements Serializable {
 
 	/*
 	 * NGram.java Creates an ngram from a given string.

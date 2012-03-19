@@ -61,9 +61,9 @@ public class Tokenizer {
 		// tokenize
 		String tokens = str
 				.replaceAll(
-						"<style[^<]*</style>|<script[^<]*</script>|<[^>]*>|<!--[^>]>|[^a-zA-Z0-9' ]|\\s*",
+						"<style[^<]*</style>|<script[^<]*</script>|<[^>]*>|<!--[^>]>|[^\\w' ]|\\s{2,}",
 						"");
-		
+				
 		return tokens;
 	}
 

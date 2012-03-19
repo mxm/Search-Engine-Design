@@ -6,7 +6,9 @@ import java.util.*;
 import java.util.regex.*;
 
 import postprocessing.NGram;
+import postprocessing.SimHash;
 import postprocessing.Tokenizer;
+import postprocessing.Hash;
 
 /*
  * This class provides methods for getting the content
@@ -16,9 +18,12 @@ import postprocessing.Tokenizer;
  * max.michels@fu-berlin.de
  */
 
-public class Document implements Serializable {
+public class Document implements Serializable, Comparable<Document> {
 
 	private static final long serialVersionUID = -3092849712355372568L;
+	
+	//DocId is the hash of the url for unique identification
+	String docID;
 
 	URL url;
 	String host;
@@ -28,6 +33,8 @@ public class Document implements Serializable {
 	Date fetched;
 	long lastModified;
 	String content;
+	
+	String simHash;
 
 	Pattern urlPattern = Pattern
 			.compile(
@@ -38,6 +45,7 @@ public class Document implements Serializable {
 
 	public Document(URL url) {
 		this.url = url;
+		this.docID = Hash.sha256(url.toString());
 	}
 
 	public boolean download() {
@@ -74,7 +82,7 @@ public class Document implements Serializable {
 
 			len = totalBytesFetched;
 
-			content = variableArray.toString();// .toLowerCase();
+			content = variableArray.toString();
 
 			br.close();
 			isr.close();
@@ -123,6 +131,14 @@ public class Document implements Serializable {
 	public void generateNGram(int n) {
 		ngram = new NGram(n, content);
 	}
+	
+	public void simHash(){
+		try {
+			simHash = SimHash.hash(content);
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+	}
 
 	public boolean save() {
 		FileOutputStream fout = null;
@@ -142,6 +158,19 @@ public class Document implements Serializable {
 			return false;
 		}
 
+	}
+	
+	public String getID(){
+		return docID;
+	}
+	
+	public String toString(){
+		return url.toString()+" "+docID;
+	}
+
+	@Override
+	public int compareTo(Document o) {
+		return docID.compareTo(o.docID);
 	}
 
 }

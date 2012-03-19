@@ -1,6 +1,8 @@
 package postprocessing;
 
-public class NFragment implements Comparable<NFragment> {
+import java.io.Serializable;
+
+public class NFragment implements Comparable<NFragment>, Serializable {
 
 	/*
 	 * NFragment.java Data structure for the fragments that a ngram consists of

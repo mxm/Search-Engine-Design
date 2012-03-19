@@ -6,22 +6,21 @@ import java.util.Vector;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 
+import postprocessing.SimHash;
+
 public class Worker extends Thread {
 
 	/*
-	 * Worker.java 
-	 * The workers crawl websites, tokenize them and generate Ngrams
+	 * Worker.java The workers crawl websites, tokenize them and generate Ngrams
 	 * 
-	 * 2011 - Maximilian Michels
-	 * max.michels@fu-berlin.de
-	 * 
+	 * 2011 - Maximilian Michels max.michels@fu-berlin.de
 	 */
 
 	Queue queue;
 	Controller con;
 	int id;
 	CyclicBarrier barrier;
-	
+
 	Vector<Document> docs;
 
 	public Worker(Controller con, CyclicBarrier barrier, Queue queue, int id) {
@@ -37,31 +36,41 @@ public class Worker extends Thread {
 		while (true) {
 
 			URL url;
-			
+
 			while ((url = queue.getURL()) != null) {
-				
+
 				if (con.stop)
 					break;
-				
+
 				Document doc = new Document(url);
-				//continue if download fails
-				if(!doc.download()){
+				// continue if download fails
+				if (!doc.download()) {
 					continue;
 				}
 				Collection<URL> col = doc.extractLinks();
 				queue.insertURLCollection(col);
-				System.out.println("Thread "+id+": "+queue.newURLs.size()+" URLs queued!");
-				
+				System.out.println("Thread " + id + ": " + queue.newURLs.size()
+						+ " URLs queued!");
+
 				doc.tokenize();
+				doc.simHash();
+				for (Document other : docs) {
+					int similarity = SimHash.similarity(doc.simHash,
+							other.simHash);
+					if (similarity > 90) {
+						System.out.println(doc.url + " is similiar to "
+								+ other.url + " (" + similarity + "%)");
+					}
+				}
 				doc.generateNGram(3);
-				
-				//we will store them in memory for now...
-				//doc.save();
+
+				// we will store them in memory for now...
+				// doc.save();
 				docs.add(doc);
 			}
 
-			/* We have to wait for the other works to advance to
-			 * next depth
+			/*
+			 * We have to wait for the other works to advance to next depth
 			 */
 			try {
 				barrier.await();
