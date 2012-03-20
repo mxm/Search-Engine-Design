@@ -62,7 +62,7 @@ public class Worker extends Thread {
 								+ other.url + " (" + similarity + "%)");
 					}
 				}
-				doc.generateNGram(3);
+				//doc.generateNGram(3);
 
 				// we will store them in memory for now...
 				// doc.save();

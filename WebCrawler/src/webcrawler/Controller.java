@@ -39,12 +39,12 @@ public class Controller extends Thread {
 			} else {
 				queue.setDepth(depth);
 				System.out.println("depth: " + depth);
-				try {
+				/*try {
 					sleep(0);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-				}
+				}*/
 			}
 		}
 	};
@@ -70,14 +70,6 @@ public class Controller extends Thread {
 
 	public void stopCrawling() {
 		stop = true;
-		for (Worker worker : workers) {
-			try {
-				worker.join();
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
 		System.out.println("Crawler stopped!");
 	}
 

@@ -47,13 +47,14 @@ public class Queue {
 	}
 
 	public synchronized URL getURL() {
-		if (curURLs.isEmpty()) {
-			return null;
-		} else {
+		while (!curURLs.isEmpty()) {
 			URL newURL = curURLs.pop();
-			visitedURLs.add(newURL);
-			return newURL;
+			if (!visitedURLs.contains(newURL)) {
+				visitedURLs.add(newURL);
+				return newURL;
+			}
 		}
+		return null;
 	}
 
 	public synchronized void insertURL(URL url) {
